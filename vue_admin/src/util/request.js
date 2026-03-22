@@ -1,16 +1,14 @@
 // 引入axios
 import axios from 'axios';
 
+// 1. 确保这里定义了 baseUrl
+const baseUrl = '/api/';
 
-let baseUrl="http://localhost:8000/";
 // 创建axios实例
 const httpService = axios.create({
-    // url前缀-'http:xxx.xxx'
-    // baseURL: process.env.BASE_API, // 需自定义
-    baseURL:baseUrl,
-    // 请求超时时间
-    timeout: 3000 // 需自定义
-});
+    baseURL: '/api',  // <--- 重点：改为相对路径
+    timeout: 5000
+})
 
 //添加请求和响应拦截器
 // 添加请求拦截器

@@ -16,10 +16,11 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 抑制 ResizeObserver 无关警告
 const originalError = console.error
 console.error = function (...args) {
-  if (args && args[0] && args[0].includes('ResizeObserver loop completed with undelivered notifications')) {
+  // 关键修复：先判断 args[0] 是否为字符串，再调用 includes
+  if (args && typeof args[0] === 'string' && args[0].includes('ResizeObserver loop completed with undelivered notifications')) {
     return // 过滤该警告
   }
-  originalError.call(console, ...args) // 其他错误正常打印
+  originalError.apply(console, args) // 使用 apply 传递完整的参数数组
 }
 
 const app = createApp(App)

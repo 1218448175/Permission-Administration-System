@@ -27,4 +27,6 @@ urlpatterns = [
 
     # 配置媒体文件的路由地址
     re_path('media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
+    # 兼容 Nginx 转发过来的带 api 前缀的媒体请求
+    re_path(r'^api/media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

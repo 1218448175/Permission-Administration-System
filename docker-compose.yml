@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # --- 后端服务 (Django + Gunicorn) ---
+  backend:
+    build:
+      context: ./python_admin
+      dockerfile: Dockerfile
+    # 【已修正】这里改为 python_admin.wsgi:application
+    command: >
+      bash -c "python manage.py migrate --noinput &&
+               python manage.py collectstatic --noinput &&
+               gunicorn python_admin.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - ./python_admin:/app
+      - ./host_static_data:/app/static_root 
+    ports:
+      - "8000:8000" 
+    environment:
+      - DEBUG=False
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=db_admin
+      - DB_USER=root
+      - DB_PASSWORD=819924zxc
+      - REDIS_LOCATION=redis://redis:6379/1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  # --- 前端服务 (Vue 3 + Nginx) ---
+  frontend:
+    build:
+      context: ./vue_admin
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # --- 数据库 (MySQL 8) ---
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 819924zxc
+      MYSQL_DATABASE: db_admin
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # --- 缓存 (Redis) ---
+  redis:
+    image: redis:7-alpine
+    container_name: my_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  redis_data:

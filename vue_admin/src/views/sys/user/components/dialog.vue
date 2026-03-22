@@ -43,7 +43,8 @@ const formRef = ref(null)
 // 检查用户名是否重复
 const checkUsername = async (rule, value, callback) => {
   if (form.value.id === -1) {
-    const res = await requestUtil.post("user/check", {'name': form.value.username})
+    console.log("提交的信息:", form.value)
+    const res = await requestUtil.post("user/check", {'username': form.value.username})
     if (res.data.code === 500) {
       callback(new Error("用户名已存在!"))
     } else {

@@ -188,32 +188,37 @@ class PwdView(View):
 
 
 # 图像上传逻辑
+import os
+
+
 class ImageView(View):
     def post(self, request):
-        # 获取文件
         file = request.FILES.get('avatar')
-        print('file:', file)
         if file:
-            file_name = file.name
+            suffixName = file.name.split('.')[-1]
+            new_file_name = datetime.now().strftime('%Y%m%d%H%M%S') + '.' + suffixName
 
-            # 获取文件后缀名并重命名文件
-            suffixName = file_name.split('.')[-1]
-            new_file_name = datetime.now().strftime('%Y%m%d%H%M%S') + suffixName
+            # 【关键修改】使用 os.path.join 自动处理斜杠
+            # 确保保存路径在 Linux 下是 /app/media/userAvatar/xxx.jpg
+            save_dir = os.path.join(str(settings.MEDIA_ROOT), 'userAvatar')
 
-            file_path = str(settings.MEDIA_ROOT) + '\\userAvatar\\' + new_file_name
+            # 如果文件夹不存在，自动创建（防止报错）
+            if not os.path.exists(save_dir):
+                os.makedirs(save_dir)
 
-            print('file_path', file_path)
-            print('new', new_file_name)
+            file_path = os.path.join(save_dir, new_file_name)
+
+            print('实际保存路径:', file_path)
 
             try:
-                # 写入文件
                 with open(file_path, 'wb') as f:
                     for chunk in file.chunks():
                         f.write(chunk)
+                # 返回时只返回文件名
                 return JsonResponse({'code': 200, 'title': new_file_name})
             except Exception as e:
-                print(e)
-                return JsonResponse({'code': 500, 'errorInfo': '上传失败'})
+                print(f"写入失败: {e}")
+                return JsonResponse({'code': 500, 'errorInfo': '文件写入失败'})
 
 
 # 头像修改逻辑

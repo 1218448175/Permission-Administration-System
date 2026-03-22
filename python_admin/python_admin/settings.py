@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +25,11 @@ SECRET_KEY = "django-insecure-l=tg*y@dc0fu^5g3!@#c9oqd!-0%i-qxxda(6)np&ns2gs5yg-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "119.39.18.161",
+    'localhost',
+    '127.0.0.1'
+]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -38,7 +43,8 @@ CORS_ALLOW_METHODS = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        # 读取环境变量，默认指向本地 (如果没配 Redis 服务，建议先改回本地开发配置或添加 Redis 服务)
+        "LOCATION": os.environ.get("REDIS_LOCATION", "redis://127.0.0.1:6379/1"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -101,11 +107,11 @@ WSGI_APPLICATION = "python_admin.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "db_admin",
-        "USER": "root",
-        "PASSWORD": "819924zxc",
-        "HOST": "127.0.0.1",
-        "PORT": "3306",
+        "NAME": os.environ.get("DB_NAME", "db_admin"),       # 默认库名
+        "USER": os.environ.get("DB_USER", "root"),           # 默认用户
+        "PASSWORD": os.environ.get("DB_PASSWORD", "819924zxc"), # 默认密码
+        "HOST": os.environ.get("DB_HOST", "127.0.0.1"),      # 关键：Docker 中会被覆盖为 'db'
+        "PORT": os.environ.get("DB_PORT", "3306"),
     }
 }
 
@@ -134,6 +140,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = "static/"
 

@@ -275,3 +275,32 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# === 针对你当前项目的特别补充 ===
+
+# 1. 忽略 Django 媒体文件 (防止上百MB的测试图片进仓库)
+# 我们只保留 media 目录结构，但忽略其中的具体上传内容
+python_admin/media/*
+# 如果你想在 Gitee 上保留默认头像，可以取消下面这行的注释
+# !python_admin/media/userAvatar/default.jpg
+
+# 2. 忽略前端 node_modules (防止数万个小文件导致上传极慢)
+# 虽然你上面写了 node_modules，但在多级目录下建议这样写更稳妥
+**/node_modules/
+**/dist/
+
+# 3. 忽略 Docker 本地数据卷 (如果有的话)
+# 如果你在 docker-compose 里映射了本地数据库文件夹，请忽略它
+mysql_data/
+db_data/
+
+# 4. 忽略前端生成的配置文件
+vue_admin/.env.local
+vue_admin/.env.*.local
+
+# 5. 补充忽略 Python 虚拟环境名
+venv/
+.venv/
+env/
+# 忽略 Django 收集的静态文件目录（生产环境由 Nginx 处理）
+python_admin/static_collected/
