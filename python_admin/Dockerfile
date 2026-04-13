@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 
 # 5. 安装 Python 依赖
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 # 6. 复制整个项目代码
 # "." 代表当前目录（即包含 manage.py, menu, user 等文件夹的根目录）
