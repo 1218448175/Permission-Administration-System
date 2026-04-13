@@ -38,7 +38,7 @@
 
 项目采用经典的前后端分离三层架构设计：
 
-![](.\readme_resources\framework_graph.png)
+![](readme_resources\framework_graph.png)
 
 项目逻辑流说明 ：
 
