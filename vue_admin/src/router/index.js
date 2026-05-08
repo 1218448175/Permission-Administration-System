@@ -7,11 +7,13 @@ const routes = [
     name: '主页',
     component: ()=> import('../layout/index.vue'),
     redirect: '/index',
+    meta: { title: "主页"},
     children: [
         {
             path: '/index',
             name: '首页',
-            component: () => import('../views/index/index.vue')
+            component: () => import('../views/index/index.vue'),
+
         },
         // {
         //     path: '/sys/user',
@@ -48,7 +50,8 @@ const routes = [
   {
       path: '/login',
       name: 'login',
-      component: ()=> import('../views/Login.vue')
+      component: ()=> import('../views/Login.vue'),
+      meta: { title: "登录页面"}
   }
 ]
 
