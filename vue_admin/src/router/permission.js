@@ -11,6 +11,11 @@ router.beforeEach(async (to, from , next) => {
     let hasRoutes = store.state.hasRoutes
     // 判断是否有token
     let token = window.sessionStorage.getItem('token')
+    if (to.meta.title) {
+        document.title = to.meta.title
+    } else {
+        document.title = "默认标题"
+    }
     if (token) {
         if (!hasRoutes) {
             // 绑定路由（改为异步等待）
@@ -65,7 +70,8 @@ const menuToRoute = (menu, parentName) => {
             name: menu.name,
             path: menu.path,
             meta: {
-                parentName: parentName  // 元信息，记录父菜单名称
+                parentName: parentName,  // 元信息，记录父菜单名称
+                title: menu.name
             }
         }
         route.component = () => import('@/views/' + menu.component + '.vue')
