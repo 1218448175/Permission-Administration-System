@@ -33,13 +33,14 @@ services:
 
 # --- 前端服务 (Vue 3 + Nginx) ---
   frontend:
-    image: nginx:alpine  # 👈 改变：直接使用官方现成的轻量 Nginx 镜像，不再用 Dockerfile 现场编译
+    image: nginx:alpine
     container_name: vue_frontend
     ports:
       - "80:80"
     volumes:
-      # 👈 改变：把本地同步上去的 dist 文件夹，直接挂载到 Nginx 的网页根目录下
       - ./vue_admin/dist:/usr/share/nginx/html
+      # 👈 增加这行：把刚才写好的 Nginx 配置映射进去
+      - ./vue_admin/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - backend
     restart: unless-stopped
