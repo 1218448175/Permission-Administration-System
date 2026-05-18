@@ -1,0 +1,32 @@
+name: Simple SSH Deploy to Aliyun
+
+# 触发条件：当 main 分支有 push 提交时触发
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # 借用 GitHub 的虚拟环境发个 SSH 指令即可
+    
+    steps:
+    - name: 远程 SSH 连接服务器并更新代码部署
+      uses: appleboy/ssh-action@v1.0.3 # 成熟的 SSH 插件
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          # 1. 进入阿里云服务器上存放 docker-compose.yml 的实际项目目录
+          cd /home/zjiaxing/db_admin
+          
+          # 2. 强制拉取 GitHub 上的最新代码
+          git pull origin main
+          
+          # 3. 让 docker-compose 现场编译新代码并后台平滑重启
+          # --build 参数会确保 Django 和前端的代码改动被重新打包成新镜像
+          docker compose up -d --build --remove-orphans
+          
+          # 4. 清理掉本地因为重新 build 产生的旧镜像碎片，释放阿里云空间
+          docker image prune -f
