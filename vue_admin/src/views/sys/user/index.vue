@@ -182,7 +182,7 @@ initUserList()
       <el-table-column prop="status" label="状态？" width="200" align="center">
         <template v-slot="{row}">
           <el-switch v-model="row.status" @change="statusChangeHandle(row)" active-text="正常"
-                     inactive-text="禁用" :active-value="1" :inactive-value="0"></el-switch>
+                     inactive-text="禁用" :active-value="0" :inactive-value="1"></el-switch>
         </template>
       </el-table-column>
       <el-table-column prop="create_time" label="创建时间" width="200" align="center"/>
