@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvue_admin"]=self["webpackChunkvue_admin"]||[]).push([[538],{5538:function(n,e,u){u.r(e),u.d(e,{default:function(){return f}});var a=u(641);const r={class:"home"};function t(n,e,u,t,c,d){return(0,a.uX)(),(0,a.CE)("div",r," 欢迎使用用户权限管理系统！ ")}var c={name:"index"},d=u(6262);const s=(0,d.A)(c,[["render",t],["__scopeId","data-v-df6785f6"]]);var f=s}}]);
+//# sourceMappingURL=538.90c8a37a.js.map

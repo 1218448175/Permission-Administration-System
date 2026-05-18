@@ -31,13 +31,15 @@ services:
         condition: service_started
     restart: unless-stopped
 
-  # --- 前端服务 (Vue 3 + Nginx) ---
+# --- 前端服务 (Vue 3 + Nginx) ---
   frontend:
-    build:
-      context: ./vue_admin
-      dockerfile: Dockerfile
+    image: nginx:alpine  # 👈 改变：直接使用官方现成的轻量 Nginx 镜像，不再用 Dockerfile 现场编译
+    container_name: vue_frontend
     ports:
       - "80:80"
+    volumes:
+      # 👈 改变：把本地同步上去的 dist 文件夹，直接挂载到 Nginx 的网页根目录下
+      - ./vue_admin/dist:/usr/share/nginx/html
     depends_on:
       - backend
     restart: unless-stopped

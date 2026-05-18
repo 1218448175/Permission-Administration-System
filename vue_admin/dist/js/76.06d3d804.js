@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkvue_admin"]=self["webpackChunkvue_admin"]||[]).push([[76],{7695:function(n,e,u){function r(n,e){return" 部门管理 "}u.r(e),u.d(e,{default:function(){return f}});var t=u(6262);const a={},c=(0,t.A)(a,[["render",r]]);var f=c}}]);
+//# sourceMappingURL=76.06d3d804.js.map
