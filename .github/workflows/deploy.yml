@@ -19,7 +19,7 @@ jobs:
         key: ${{ secrets.SERVER_SSH_KEY }}
         script: |
           # 1. 进入阿里云服务器上存放 docker-compose.yml 的实际项目目录
-          cd /home/zjiaxing/db_admin
+          cd /home/zjiaxing/db_admin  # 权限已修改
           
           # 2. 强制拉取 GitHub 上的最新代码
           git pull origin main
